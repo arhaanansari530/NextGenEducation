@@ -18,6 +18,7 @@
             line-height: 1.6;
             color: #333;
             background-color: #f9f9f9;
+            overflow-x: hidden;
         }
 
         h1, h2, h3, h4 {
@@ -48,6 +49,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
+            position: relative;
         }
 
         .logo {
@@ -56,6 +58,7 @@
             font-size: 1.8rem;
             font-weight: 800;
             color: #1a237e;
+            z-index: 1001;
         }
 
         .logo span {
@@ -67,30 +70,173 @@
             color: #2962ff;
         }
 
-        nav ul {
+        /* Desktop Navigation */
+        .desktop-nav {
+            display: flex;
+        }
+
+        .desktop-nav ul {
             display: flex;
             list-style: none;
         }
 
-        nav li {
+        .desktop-nav li {
             margin-left: 30px;
+            position: relative;
         }
 
-        nav a {
+        .desktop-nav a {
             text-decoration: none;
             color: #333;
             font-weight: 500;
             transition: color 0.3s;
+            padding: 5px 0;
+            position: relative;
         }
 
-        nav a:hover {
+        .desktop-nav a:hover {
             color: #2962ff;
         }
 
-        .mobile-menu {
+        .desktop-nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #2962ff;
+            left: 0;
+            bottom: 0;
+            transition: width 0.3s;
+        }
+
+        .desktop-nav a:hover:after {
+            width: 100%;
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
             display: none;
-            font-size: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #1a237e;
             cursor: pointer;
+            z-index: 1001;
+            padding: 5px;
+            transition: transform 0.3s;
+        }
+
+        .mobile-menu-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background-color: #fff;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.4s ease-in-out;
+            overflow-y: auto;
+            padding: 80px 30px 30px;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+        }
+
+        .mobile-nav li {
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav.active li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .mobile-nav li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-nav li:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-nav li:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-nav li:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-nav li:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-nav li:nth-child(6) { transition-delay: 0.35s; }
+        .mobile-nav li:nth-child(7) { transition-delay: 0.4s; }
+
+        .mobile-nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 1.2rem;
+            display: block;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .mobile-nav a:hover,
+        .mobile-nav a.active {
+            background-color: #f0f7ff;
+            color: #2962ff;
+            border-left-color: #2962ff;
+            padding-left: 20px;
+        }
+
+        .mobile-nav-cta {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .mobile-nav-cta .btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .mobile-nav-cta .btn-primary {
+            background-color: #2962ff;
+            color: white;
+        }
+
+        .mobile-nav-cta .btn-secondary {
+            background-color: #f0f7ff;
+            color: #2962ff;
+            border: 1px solid #2962ff;
+        }
+
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .mobile-nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Hero Section */
@@ -640,7 +786,21 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1100px) {
+            .desktop-nav li {
+                margin-left: 20px;
+            }
+        }
+
         @media (max-width: 992px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
             .form-container {
                 grid-template-columns: 1fr;
             }
@@ -665,14 +825,6 @@
         }
 
         @media (max-width: 768px) {
-            nav ul {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: block;
-            }
-            
             .hero h1 {
                 font-size: 2.2rem;
             }
@@ -696,6 +848,33 @@
             .form-content h2 {
                 font-size: 1.8rem;
             }
+            
+            .mobile-nav {
+                max-width: 320px;
+                padding: 70px 20px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .mobile-nav {
+                width: 85%;
+            }
         }
     </style>
 </head>
@@ -707,7 +886,9 @@
                 <i class="fas fa-graduation-cap"></i>
                 NextGen<span>Edu</span>
             </div>
-            <nav>
+            
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
                 <ul>
                     <li><a href="#home">Home</a></li>
                     <li><a href="#admission-form">Admission 2025</a></li>
@@ -718,9 +899,34 @@
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
-            <div class="mobile-menu">
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
-            </div>
+            </button>
+            
+            <!-- Mobile Navigation Overlay -->
+            <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+            
+            <!-- Mobile Navigation Menu -->
+            <nav class="mobile-nav" id="mobileNav">
+                <ul>
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#admission-form" class="nav-link">Admission 2025</a></li>
+                    <li><a href="#about" class="nav-link">About Us</a></li>
+                    <li><a href="#programs" class="nav-link">Programs</a></li>
+                    <li><a href="#features" class="nav-link">Why Choose Us</a></li>
+                    <li><a href="#process" class="nav-link">Admission Process</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <div class="mobile-nav-cta">
+                    <a href="#admission-form" class="btn btn-primary">Apply Now</a>
+                    <a href="tel:+917310752257" class="btn btn-secondary">
+                        <i class="fas fa-phone-alt"></i> Call Now
+                    </a>
+                </div>
+            </nav>
         </div>
     </header>
 
@@ -821,7 +1027,7 @@
                                 <option value="jain">Jain University</option>
                                 <option value="mangalayatan">Mangalayatan University</option>
                                 <option value="lpu">Lovely Professional University</option>
-                                <option value="gla">GLA University</option>
+                                <option value="gla">GLA University</div>
                                 <option value="amity">Amity University</option>
                                 <option value="dypatil">DY Patil University</option>
                                 <option value="not-sure">Not Sure - Need Recommendation</option>
@@ -840,7 +1046,7 @@
                     <h3>Start Your Educational Journey Today</h3>
                     <p><i class="fas fa-clock"></i> Applications closing soon for 2025 intake</p>
                     <p><i class="fas fa-university"></i> 8+ Top Universities Partnered</p>
-                    <p><i class="fasfa-users"></i> 10,000+ Students Guided</p>
+                    <p><i class="fas fa-users"></i> 10,000+ Students Guided</p>
                     <p><i class="fas fa-award"></i> UGC Approved Programs</p>
                     <p><i class="fas fa-handshake"></i> 100% Admission Assistance</p>
                     
@@ -1168,33 +1374,70 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            const nav = document.querySelector('nav ul');
-            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
-        });
+        // Mobile Navigation Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const body = document.body;
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            mobileNav.classList.toggle('active');
+            mobileNavOverlay.classList.toggle('active');
+            body.classList.toggle('no-scroll');
+            
+            // Change icon
+            const icon = mobileMenuBtn.querySelector('i');
+            if (mobileNav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // Close mobile menu when clicking a link
+        function closeMobileMenu() {
+            mobileNav.classList.remove('active');
+            mobileNavOverlay.classList.remove('active');
+            body.classList.remove('no-scroll');
+            
+            // Reset icon
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+
+        // Event listeners
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileNavOverlay.addEventListener('click', closeMobileMenu);
+
+        // Close menu when clicking a nav link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
                 
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    if(window.innerWidth <= 768) {
-                        document.querySelector('nav ul').style.display = 'none';
+                // Smooth scroll to section
+                const targetId = link.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
                     }
                 }
             });
+        });
+
+        // Close menu when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                closeMobileMenu();
+            }
         });
 
         // Form submission handling
@@ -1236,7 +1479,58 @@
                 
                 // Scroll to top of form
                 document.getElementById('admission-form').scrollIntoView({ behavior: 'smooth' });
+                
+                // Close mobile menu if open
+                if (mobileNav.classList.contains('active')) {
+                    closeMobileMenu();
+                }
             }, 1500);
+        });
+
+        // Smooth scrolling for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Update active nav link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            // Update active link in desktop nav
+            document.querySelectorAll('.desktop-nav a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Update active link in mobile nav
+            document.querySelectorAll('.mobile-nav a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
         });
     </script>
 </body>
